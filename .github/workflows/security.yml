@@ -28,12 +28,12 @@ jobs:
         with:
           config: p/security-audit
 
-      # create folder for SARIF reports
+      # create folder so Trivy can write SARIF output
       - name: Create reports directory
         run: mkdir -p reports
 
       - name: SCA with Trivy
-        uses: aquasecurity/trivy-action@0.20.0
+        uses: aquasecurity/trivy-action@master
         with:
           scan-type: fs
           scan-ref: .

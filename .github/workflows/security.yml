@@ -28,7 +28,7 @@ jobs:
           config: p/security-audit
 
       - name: SCA with OSV-Scanner
-        uses: google/osv-scanner-action@v1.8.0
+        uses: google/osv-scanner-action@v1
         with:
           scan-args: -r . --format=html --output=reports/osv-report.html
 

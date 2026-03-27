@@ -27,10 +27,13 @@ jobs:
         with:
           config: p/security-audit
 
-      - name: SCA with OSV-Scanner
-        uses: google/osv-scanner-action@v1
+      - name: SCA with Trivy
+        uses: aquasecurity/trivy-action@master
         with:
-          scan-args: -r . --format=html --output=reports/osv-report.html
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'html'
+          output: 'reports/trivy-report.html'
 
       - name: Upload reports
         uses: actions/upload-artifact@v4

@@ -32,8 +32,8 @@ jobs:
         with:
           scan-type: 'fs'
           scan-ref: '.'
-          format: 'html'
-          output: 'reports/trivy-report.html'
+          format: 'sarif'
+          output: 'reports/trivy-results.sarif'
 
       - name: Upload reports
         uses: actions/upload-artifact@v4

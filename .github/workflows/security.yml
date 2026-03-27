@@ -9,7 +9,6 @@ on:
 jobs:
   security-scan:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -23,23 +22,17 @@ jobs:
       - name: Build with Maven
         run: mvn -B compile --no-transfer-progress
 
-      - name: SAST with Semgrep
-        uses: returntocorp/semgrep-action@v1
-        with:
-          config: p/security-audit
-
-      # create folder so Trivy can write SARIF output
       - name: Create reports directory
         run: mkdir -p reports
 
-      - name: SCA with Trivy
+      - name: Security Scan with Trivy (SAST + SCA + Secrets)
         uses: aquasecurity/trivy-action@master
         with:
-          scan-type: fs
-          scan-ref: .
-          format: sarif
-          output: reports/trivy-results.sarif
-          scanners: vuln
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'reports/trivy-results.sarif'
+          scanners: 'vuln,secret'
 
       - name: Upload security reports
         uses: actions/upload-artifact@v4

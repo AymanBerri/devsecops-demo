@@ -9,6 +9,7 @@ on:
 jobs:
   security-scan:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -20,22 +21,27 @@ jobs:
           distribution: 'temurin'
 
       - name: Build with Maven
-        run: mvn compile
+        run: mvn -B compile --no-transfer-progress
 
       - name: SAST with Semgrep
         uses: returntocorp/semgrep-action@v1
         with:
           config: p/security-audit
 
-      - name: SCA with Trivy
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'fs'
-          scan-ref: '.'
-          format: 'sarif'
-          output: 'reports/trivy-results.sarif'
+      # Create directory for scan reports
+      - name: Create reports directory
+        run: mkdir -p reports
 
-      - name: Upload reports
+      - name: SCA with Trivy
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          format: sarif
+          output: reports/trivy-results.sarif
+          scanners: vuln
+
+      - name: Upload security reports
         uses: actions/upload-artifact@v4
         with:
           name: security-reports
